@@ -1,23 +1,10 @@
-#include "DuplicateStringFinderHeader.hpp"
+#include "KasisukiExaminatorHeader.hpp"
 
-DuplicateStringFinder::DuplicateStringFinder(string plain){
-	this->plain = plain;
+KasisukiExaminator::KasisukiExaminator(vector<AppearTable>Where){
+	this->Where = Where;
 }
-void DuplicateStringFinder::StringAnalyzer(){
-	//-------------------------------------------------
-	//initialize CMap to register first location owhere each characters appeared
-	//-------------------------------------------------
-	size = plain.length();
-	for(int i = 0; i < size; i++)
-		CMap[string()+plain[i]].push_back(i);
-}
-set<int> DuplicateStringFinder::SearchDuplicateString(double limen){
-		//-------------------------------------------------
-		//search strings that appeared 	more than twice
-		//-------------------------------------------------
-		for(auto c = CMap.begin(); c != CMap.end(); c++)
-			MoreSearchDuplicateString(c);
-		
+
+set<int> KasisukiExaminator::Examinate(double limen){
 		//-------------------------------------------------
 		//calculate scores and statistic
 		//-------------------------------------------------
@@ -31,7 +18,7 @@ set<int> DuplicateStringFinder::SearchDuplicateString(double limen){
 		//-------------------------------------------------
 		//extract strings most appeared in each group that has same number of length of string
 		//-------------------------------------------------
-		for(const refPSV& w: Where){
+		for(const refAppearTable& w: Where){
 			if(!AppearMap.count(w.first.length())){
 				AppearMap[w.first.length()].push_back(w);
 				continue;
@@ -50,11 +37,11 @@ set<int> DuplicateStringFinder::SearchDuplicateString(double limen){
 			double score = log2(WordCount) * NumAppearance;
 			if(sc->Standardize(score) < limen)continue;
 			
-			PeriodMap[a.first] = new vector<refPSV>;
-			vector<refPSV>* AddrefPSV = PeriodMap[a.first];
+			PeriodMap[a.first] = new vector<refAppearTable>;
+			vector<refAppearTable>* AddrefAppearTable = PeriodMap[a.first];
 			for(auto s: a.second){
-				AddrefPSV->push_back(make_pair<const string, vector<int>>((const string)s.first, vector<int>()));
-				vector<int>* AddVector = &(AddrefPSV->back().second);
+				AddrefAppearTable->push_back(make_pair<const string, vector<int>>((const string)s.first, vector<int>()));
+				vector<int>* AddVector = &(AddrefAppearTable->back().second);
 				int Old = s.second[0];
 				
 				for(auto p: s.second){
@@ -91,22 +78,4 @@ set<int> DuplicateStringFinder::SearchDuplicateString(double limen){
 		//-------------------------------------------------
 		return Candidates;
 
-}
-void DuplicateStringFinder::MoreSearchDuplicateString(
-	map<string, vector<int>>::iterator &c){
-	map<string, vector<int>>NextS;
-		
-		for(auto l: c->second){
-			string AddStr = c->first + plain[l + (c->first).length()];
-			if((long int)l < (long int)(size-(c->first).length()))
-				NextS[AddStr].push_back(l);
-		}
-		map<string, vector<int> >::iterator it = NextS.begin();
-		while(it != NextS.end()){
-			if(it->second.size() > 1){
-				MoreSearchDuplicateString(it);
-				Where.push_back(*it);
-				++it;
-			} else NextS.erase(it++);
-		}
 }

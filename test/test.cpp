@@ -1,16 +1,19 @@
-#include "DuplicateStringFinderHeader.hpp"
+#include "KasisukiExaminatorHeader.hpp"
 #include <iostream>
 using namespace std;
 
 int main(int argc, char *argv[]){
-	DuplicateStringFinder *dsf;
+	vector<AppearTable> table{
+		make_pair<string, vector<int>>("a", vector<int>{1, 54, 75, 2}), 
+		make_pair<string, vector<int>>("b", vector<int>{2, 54, 87}), 
+		make_pair<string, vector<int>>("cd", vector<int>{2, 5, 7, 9}), 
+		make_pair<string, vector<int>>("dd", vector<int>{14, 54}), 
+		make_pair<string, vector<int>>("etd", vector<int>{2, 4, 43, 67}) 
+	};
+	KasisukiExaminator *ke;
 	set<int> result;
-	if(argc > 1) dsf = new DuplicateStringFinder(argv[1]);
-	else dsf = new DuplicateStringFinder("abccabaabcccababcb");
-	//dsf->PrintPlain();
-	dsf->StringAnalyzer();
-	if(argc > 2) result = dsf->SearchDuplicateString(atof(argv[2]));
-	else result = dsf->SearchDuplicateString(2.4);
+	ke = new KasisukiExaminator(table);
+	result = ke->Examinate(2.4);
 	
 	for(auto r: result)cout << r << ", ";	
 	cout << endl;
