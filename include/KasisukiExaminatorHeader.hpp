@@ -1,7 +1,8 @@
-#ifndef dsfH
-#define dsfH
+#ifndef kasixH
+#define kasiexH
 
 #include "StatisticsCalculator.hpp"
+#include "DuplicateStringFinderHeader.hpp"
 #include <algorithm>
 #include <string>
 #include <vector>
@@ -9,7 +10,6 @@
 #include <set>
 #include <utility>
 #include <cmath>
-using namespace std;
 
 typedef pair<string, vector<int>> AppearTable;
 typedef pair<const string, vector<int>> refAppearTable;
@@ -23,7 +23,9 @@ private:
 	map<int, vector<refAppearTable>*> PeriodMap;
 	set<int> Candidates;
 public:
+	KasisukiExaminator() = delete;
 	KasisukiExaminator(vector<AppearTable>);
+	KasisukiExaminator(string);
 	set<int> Examinate(double);
 };
 
